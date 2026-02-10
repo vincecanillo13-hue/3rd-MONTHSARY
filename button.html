@@ -5,15 +5,17 @@
 <title>for you 🤍</title>
 <style>
     body {
-        margin: 0;
-        padding: 0;
-        background: linear-gradient(to bottom right, #e6f7ff, #db1ebc);
-        font-family: "Georgia", serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
+    margin: 0;
+    padding: 40px 0;
+    background: linear-gradient(to bottom right, #e6f7ff, #db1ebc);
+    font-family: "Georgia", serif;
+
+    display: flex;
+    justify-content: center;
+
+    overflow-x: hidden;
+}
+
 
     .card {
         background: #fff;
@@ -44,19 +46,24 @@
     margin-bottom: 25px;
 }
 
-    .falling {
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      pointer-events: none;
-      animation-name: fall;
-      animation-timing-function: linear;
-    }
+   .falling {
+    position: fixed;
+    top: 0;
+    pointer-events: none;
+}
+	
 
     @keyframes fall {
-      0% { transform: translateY(-50px); opacity: 1; }
-      100% { transform: translateY(100vh); opacity: 0; }
-    }
+  from {
+    transform: translateY(-120px);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(calc(100vh + 120px));
+    opacity: 0;
+  }
+}
+
 
 .return-btn {
   display: inline-block;
@@ -75,16 +82,14 @@
   transform: scale(1.05);
 }
 
+.letter {
+    position: relative;
+}
+
 
 </style>
 </head>
 <body>
-<div class="letter">
-    <!-- Corner flowers -->
-    <div class="flower top-left">💜 🌷 💜</div>
-    <div class="flower top-right">🌷</div>
-    <div class="flower bottom-left">🌸</div>
-    <div class="flower bottom-right">💜 🌷 💜</div>
 
 <div class="card">
     <h1>💜 FOR MY SWEETIE BABY 💜</h1>
@@ -101,7 +106,7 @@ thank you for loving me gently, for choosing me every day, for staying even when
 
 i promise to keep choosing you, to love you loudly and quietly, on good days and bad days. i promise to care for your heart the way you care for mine. 3 months may be short, but my love for you already feels endless.
 
-i want you today, tomorrow, and for all the days after. always you, my love.
+i want you today, tomorrow, and for all the days after. always you, my gorgeous and sexy wifeyy.
         <br><br>
            <p style="margin-top:20px;">
            sincerely yours,<br>
@@ -149,30 +154,33 @@ function createFallingImage() {
         img.style.height = size + "px";
     }
 
+    const safeZoneWidth = 700;
+    const screenWidth = window.innerWidth;
+    const safeZoneStart = (screenWidth - safeZoneWidth) / 2;
+    const safeZoneEnd = safeZoneStart + safeZoneWidth;
+
+    let x;
+    if (Math.random() < 0.5) {
+        x = Math.random() * safeZoneStart;
+    } else {
+        x = safeZoneEnd + Math.random() * (screenWidth - safeZoneEnd);
+    }
+
+    img.style.top = "-120px";
+    img.style.left = x + "px";
+
     const duration = 4 + Math.random() * 3;
-    img.style.animationDuration = duration + "s";
-    const safeZoneWidth = 700; // middle area to protect (card width + padding)
-const screenWidth = window.innerWidth;
 
-const safeZoneStart = (screenWidth - safeZoneWidth) / 2;
-const safeZoneEnd = safeZoneStart + safeZoneWidth;
-
-let x;
-
-if (Math.random() < 0.5) {
-  // LEFT side only
-  x = Math.random() * safeZoneStart;
-} else {
-  // RIGHT side only
-  x = safeZoneEnd + Math.random() * (screenWidth - safeZoneEnd);
-}
-
-img.style.left = x + "px";
-
+    // only start animation after image loads
+    img.onload = () => {
+        img.style.animation = `fall ${duration}s linear`;
+    };
 
     document.body.appendChild(img);
 
-    setTimeout(() => img.remove(), duration * 1000);
+    setTimeout(() => {
+        img.remove();
+    }, duration * 1000);
 }
 
 setInterval(createFallingImage, 300);
